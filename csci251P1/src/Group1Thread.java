@@ -19,17 +19,21 @@ public class Group1Thread implements Runnable {
 	private File file;
 	private BufferedReader r;
 	private String fname;
-	private ArrayList<Group2Thread> group2;
+	private ArrayList<Thread> group2;
 	private HashMap<String,Integer> targetWords;
+	private ArrayList<SharedQueue> queues;
 	
 	//Constructor
 	public Group1Thread( File file, String fname, BufferedReader r,
-			ArrayList<Group2Thread> group2,
-			HashMap<String, Integer> targetWords) {
+			ArrayList<Thread> group2,
+			HashMap<String, Integer> targetWords,
+			ArrayList<SharedQueue> queues) {
 		this.file = file;
+		this.fname = fname;
 		this.r = r;
 		this.group2 = group2;
 		this.targetWords = targetWords;
+		this.queues = queues;
 	}//end Group1ThreadConstructor
 	
 	@Override
@@ -40,8 +44,10 @@ public class Group1Thread implements Runnable {
 				String[] splitLine = line.split("\\s+|,\\s*|\\.\\s*|\\?\\s*" +
 						"|\\!\\s*|\\:\\s*|\\;\\s*");
 				for( String word : splitLine ) {
-					if( targetWords.containsKey(word) ) {
-						
+					String temp = word.toLowerCase();
+					if( targetWords.containsKey(temp) ) {
+						int group2threadid = targetWords.get(temp);
+						queues.get(group2threadid).addToQueue(fname);
 					}//end if
 				}//end for
 			}//end while

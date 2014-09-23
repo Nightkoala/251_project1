@@ -19,12 +19,21 @@ public class SharedQueue {
 		this.filesToPrint = new LinkedList<String>();
 	}//end SharedQueue constructor
 	
+	// Methods
+	
 	public synchronized void addToQueue( String fname ) {
 		filesToPrint.add(fname);
 	}//end addToQueue
 	
-	public String retrieveFirst() {
+	public synchronized String retrieveFirst() {
 		return filesToPrint.poll();
 	}//end retrieveFirst
+	
+	public synchronized boolean isEmpty() {
+		if( filesToPrint.peek() == null ) {
+			return true;
+		}//end if
+		return false;
+	}//end isEmpty
 	
 }//end SharedQueue

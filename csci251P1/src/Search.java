@@ -13,6 +13,8 @@
 
 import java.util.ArrayList;
 import java.io.*;
+import java.util.HashMap;
+
 public class Search {
 
 	/**
@@ -62,15 +64,62 @@ public class Search {
 			}//end try/catch
 		}//end for
 		
-//		// Create and start Group 2 Threads
-//		for( int i = 0 ; i < lowerWords.size() ; i++ ) {
-//			// First create the monitor
-//			SharedQueue q = new SharedQueue();
-//			
-//			// Create and start Group 2 thread
-//			Thread t = new Thread( new Group2Thread( lowerWords.get(i), q ) );
-//			t.start();
-//			
-//		}//end for
+		// Create HashMap of target words
+		HashMap<String, Integer> targetWords = new HashMap<String, Integer>();
+		for( int i = 0 ; i < lowerWords.size() ; i++ ) {
+			targetWords.put(lowerWords.get(i), i);
+		}//end for
+	
+		// Create and start Group 2 Threads
+		ArrayList<Thread> group2 = new ArrayList<Thread>();
+		ArrayList<Group2Thread> g2 = new ArrayList<Group2Thread>();
+		ArrayList<SharedQueue> queues = new ArrayList<SharedQueue>();
+		for( int i = 0 ; i < lowerWords.size() ; i++ ) {
+			// First create the monitor
+			SharedQueue q = new SharedQueue();
+			queues.add(q);
+			
+			// Create and start Group 2 thread
+			Group2Thread g2t = new Group2Thread( lowerWords.get(i), q );
+			g2.add(g2t);
+			Thread t = new Thread( g2t );
+			t.start();
+			group2.add(t);
+		}//end for
+		
+		// Create and start Group 1 Threads
+		ArrayList<Thread> group1 = new ArrayList<Thread>();
+		for( int i = 0 ; i < fFiles.size() ; i++ ) {
+			Thread t = new Thread( new Group1Thread( fFiles.get(i),
+					files[i], readers.get(i), group2, targetWords, queues ) );
+			t.start();
+			group1.add(t);
+		}//end for
+		
+		// Wait for threads to finish
+		// Group 1
+		for( Thread t : group1 ) {
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				System.err.println("Error joining threads. Abort.");
+				e.printStackTrace();
+				System.exit(1);
+			}// end try/catch
+		}//end for
+		
+		// Group2
+		for( int i = 0 ; i < group2.size() ; i++ ) {
+			Thread t = group2.get(i);
+			Group2Thread g2t = g2.get(i);
+			g2t.beforeExit();
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				System.err.println("Error joining threads. Abort.");
+				e.printStackTrace();
+				System.exit(1);
+			}//end try/catch
+		}//end for
 	}//end main
 }//end Search
