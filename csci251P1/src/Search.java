@@ -16,6 +16,9 @@ import java.io.*;
 import java.util.HashMap;
 
 public class Search {
+	
+	/** Prevent Construction */
+	private Search() { }
 
 	/**
 	 * @param args
@@ -46,7 +49,6 @@ public class Search {
 		}//end for
 		
 		// Checks if files valid, terminates program if so
-		ArrayList<File> fFiles = new ArrayList<File>();
 		ArrayList<BufferedReader> readers = new ArrayList<BufferedReader>();
 		for( String file : files ) {
 			File inFile;
@@ -55,7 +57,6 @@ public class Search {
 				inFile = new File(file);
 				r = new BufferedReader(
 						new FileReader( inFile ) );
-				fFiles.add(inFile);
 				readers.add(r);
 			} catch( FileNotFoundException e ) {
 				System.err.println(file + " not found. Abort.");
@@ -89,9 +90,9 @@ public class Search {
 		
 		// Create and start Group 1 Threads
 		ArrayList<Thread> group1 = new ArrayList<Thread>();
-		for( int i = 0 ; i < fFiles.size() ; i++ ) {
-			Thread t = new Thread( new Group1Thread( fFiles.get(i),
-					files[i], readers.get(i), group2, targetWords, queues ) );
+		for( int i = 0 ; i < files.length ; i++ ) {
+			Thread t = new Thread( new Group1Thread( files[i], readers.get(i), 
+					targetWords, queues ) );
 			t.start();
 			group1.add(t);
 		}//end for

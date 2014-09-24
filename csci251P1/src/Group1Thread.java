@@ -16,22 +16,18 @@ import java.util.HashMap;
 public class Group1Thread implements Runnable {
 
 	//Attributes
-	private File file;
 	private BufferedReader r;
 	private String fname;
-	private ArrayList<Thread> group2;
 	private HashMap<String,Integer> targetWords;
 	private ArrayList<SharedQueue> queues;
 	
 	//Constructor
-	public Group1Thread( File file, String fname, BufferedReader r,
-			ArrayList<Thread> group2,
+	
+	public Group1Thread( String fname, BufferedReader r,
 			HashMap<String, Integer> targetWords,
 			ArrayList<SharedQueue> queues) {
-		this.file = file;
 		this.fname = fname;
 		this.r = r;
-		this.group2 = group2;
 		this.targetWords = targetWords;
 		this.queues = queues;
 	}//end Group1ThreadConstructor
