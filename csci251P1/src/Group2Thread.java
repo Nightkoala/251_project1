@@ -1,11 +1,11 @@
 /**
  * Group2Thread.java
  * 
- * @author 		Derek Brown <djb3718@rit.edu>
+ * @author	Derek Brown <djb3718@rit.edu>
  * 
- * Purpose		Implementation for Group 2 threads.  Continuously checks to see
- * 				if queue is empty, if it is not empty it prints the word and the
- * 				file it was found in.
+ * Purpose	Implementation for Group 2 threads.  Continuously checks to see
+ * 		if queue is empty, if it is not empty it prints the word and the
+ * 		file it was found in.
  *
  */
 
@@ -15,7 +15,7 @@ public class Group2Thread implements Runnable {
 	
 	//Attributes
 	private String word;
-	private SharedQueue filesToPrint; //will change
+	private SharedQueue filesToPrint;
 	private boolean exit;
 	private HashSet<String> processedFiles;
 	
@@ -26,7 +26,8 @@ public class Group2Thread implements Runnable {
 	 * 
 	 * @param word	The target word that this thread is associated with
 	 * @param queue	The shared queue object that contains the file names to 
-	 * 				print if a file has found the target word for this thread.
+	 * 		print if a file has found the target word for this
+	 *		thread.
 	 */
 	public Group2Thread( String word, SharedQueue queue ) {
 		this.word = word;
@@ -47,9 +48,9 @@ public class Group2Thread implements Runnable {
 	}//end printResults
 	
 	/**
-	 * Method that is called by Search.main when it is time for the thread to
-	 * terminate.  If this method is never called the thread will infinitely
-	 * loop.
+	 * Method that is called by Search.main when it is time for the thread
+	 * to terminate, If this method is never called the thread will
+	 * infinitely loop.
 	 */
 	public void beforeExit() {
 		exit = true;
@@ -57,10 +58,10 @@ public class Group2Thread implements Runnable {
 	
 	@Override
 	/**
-	 * The run() method for Group 2 threads.  It constantly checks to see if
-	 * there is an item in the queue.  If there is it, and it is the first time
-	 * that the thread has seen the file name, it prints the results.  Otherwise
-	 * waits and loops until told to terminate.
+	 * The run() method for Group 2 threads, It constantly checks to see if
+	 * there is an item in the queue, If there is it, and it is the first
+	 * time that the thread has seen the file name, it prints the results,
+	 * Otherwise waits and loops until told to terminate.
 	 */
 	public void run() {
 		String file;

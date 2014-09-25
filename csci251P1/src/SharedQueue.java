@@ -1,10 +1,10 @@
 /**
  * SharedQueue.java
  * 
- * @author 		Derek Brown <djb3718@rit.edu>
+ * @author	Derek Brown <djb3718@rit.edu>
  * 
- * Purpose		Shared monitor class.  Will store the file names to be printed
- * 				by the Group 2 threads.
+ * Purpose	Shared monitor class.  Will store the file names to be printed
+ * 		by the Group 2 threads.
  *
  */
 
@@ -26,8 +26,8 @@ public class SharedQueue {
 	// Methods
 	
 	/**
-	 * Called by Group 1 threads.  It adds the file name to the end of the linked
-	 * list to be printed by the Group 2 thread.
+	 * Called by Group 1 threads, It adds the file name to the end of the
+	 * linked list to be printed by the Group 2 thread.
 	 * 
 	 * @param fname	The file name to be added to linked list
 	 */
@@ -36,8 +36,8 @@ public class SharedQueue {
 	}//end addToQueue
 	
 	/**
-	 * Called by Group 2 threads.  It takes and removes the front of the linked
-	 * list.
+	 * Called by Group 2 threads, It takes and removes the front of the
+	 * linked list.
 	 * 
 	 * @return	The first element of the linked list.
 	 */
@@ -46,10 +46,10 @@ public class SharedQueue {
 	}//end retrieveFirst
 	
 	/**
-	 * Called by Group 2 threads.  Checks to see if the linked list is empty.
+	 * Called by Group 2 threads, Checks to see if the linked list is empty.
 	 * 
 	 * @return	true if the linked list is empty.
-	 * 			false otherwise.
+	 * 		false otherwise.
 	 */
 	public synchronized boolean isEmpty() {
 		if( filesToPrint.peek() == null ) {

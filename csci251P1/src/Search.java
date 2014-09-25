@@ -3,11 +3,12 @@
  * 
  * @author		Derek Brown <djb3718@rit.edu>
  * 
- * purpose:		Basic thread program.  Given several file names and words to 
- * 				search for, create two groups of threads.  Group 1 reads the
- * 				file and notifies the Group 2 threads that a word has been
- * 				found and the Group 2 thread prints the first occurrence of the
- * 				word for each file, and the file it was found.
+ * purpose:		Basic thread program.  Given several file names and
+ *			words to search for, create two groups of threads.
+ *			Group 1 reads the file and notifies the Group 2 thread
+ *			that a word has been found and the Group 2 thread
+ *			prints the first occurrence of the word for each file,
+ *			and the file it was found.
  *
  */
 
@@ -25,11 +26,14 @@ public class Search {
 	/**
 	 * Checks if words given to program from command line are valid.
 	 * 
-	 * @param wordsToCheck  The array of words received from the command line
+	 * @param wordsToCheck  The array of words received from the command
+	 *			line
 	 * 
-	 * @return	if any word is found containing non-characters, the program
-	 * 			immediately displays an error message and terminates
-	 * 			Otherwise, an ArrayList<String> of all the words is returned.
+	 * @return	if any word is found containing non-characters, the
+	 *		program immediately displays an error message and
+	 *		terminates.
+	 * 		Otherwise, an ArrayList<String> of all the words is
+	 *		returned.
 	 * 
 	 */
 	public static ArrayList<String> validateWords( String[] wordsToCheck ) {
@@ -39,8 +43,9 @@ public class Search {
 			char[] chars = word.toCharArray();
 			for( char c : chars ) {
 				if( !Character.isLetter( c ) ) {
-					System.err.println( "Invalid input. " + word + " contains " +
-							"non-letter characters." );
+					System.err.println( "Invalid input. " +
+						word + " contains " +
+						"non-letter characters." );
 					System.exit( 1 );
 				}//end if
 			}//end for
@@ -51,29 +56,33 @@ public class Search {
 	}//end validateWords
 	
 	/**
-	 * Checks if the files given to program from command line exist and creates
-	 * a reader for each file.
+	 * Checks if the files given to program from command line exist and
+	 * creates a reader for each file.
 	 * 
-	 * @param files		The array of files received from the command line.
+	 * @param files  The array of files received from the command line.
 	 * 
-	 * @return	If any of the files does not exist, the program will immediately
-	 * 			display an error message and terminate.
-	 * 			Otherwise, an ArrayList<BufferedReader> containing the reader
-	 * 			for each file is returned.
+	 * @return	If any of the files does not exist, the program will
+	 *		immediately display an error message and terminate.
+	 * 		Otherwise, an ArrayList<BufferedReader> containing the
+	 *		reader for each file is returned.
 	 * 
-	 * @exception FileNotFound	if a file does not exist
+	 * @exception FileNotFound  if a file does not exist
 	 */
-	public static ArrayList<BufferedReader> validateFiles( String[] files ) {
-		ArrayList<BufferedReader> readers = new ArrayList<BufferedReader>();
+	public static ArrayList<BufferedReader> validateFiles( String[] files )
+	{
+		ArrayList<BufferedReader> readers =
+			new ArrayList<BufferedReader>();
 		for( String file : files ) {
 			File inFile;
 			BufferedReader r;
 			try {
 				inFile = new File( file );
-				r = new BufferedReader( new FileReader( inFile ) );
+				r = new BufferedReader(
+					new FileReader( inFile ) );
 				readers.add(r);
 			} catch( FileNotFoundException e ) {
-				System.err.println( file + " not found. Abort." );
+				System.err.println( file +
+					" not found. Abort." );
 				e.printStackTrace( System.err );
 				System.exit( 1 );
 			}//end try/catch
@@ -83,22 +92,23 @@ public class Search {
 
 	/**
 	 * Validates the input and exits the program, with corresponding error
-	 * message if an invalid input has been made.  If no error is detected
-	 * then program creates and starts the Group 2 threads.  It then creates
+	 * message if an invalid input has been made, If no error is detected
+	 * then program creates and starts the Group 2 threads,It then creates
 	 * and starts the Group 1 threads and waits for all of them to terminate
 	 * before exiting.
 	 * 
 	 * @param args	Command line arguments.
-	 * 				args[0] contains the files to be read.
-	 * 				args[1] contains the words to be searched for.
+	 * 			args[0] contains the files to be read.
+	 * 			args[1] contains the words to be searched for.
 	 * 
-	 * @exception InterruptedException	If one of the threads gets unexpectedly
-	 * 									interrupted.
+	 * @exception InterruptedException	If one of the threads gets
+	 *					unexpectedly interrupted.
 	 */
 	public static void main( String[] args ) {
 		
 		if( args.length != 2 ) {
-			System.err.println( "Usage: java Search <files> <words>" );
+			System.err.println( "Usage: java Search " +
+				"<files> <words>" );
 			System.exit( 1 );
 		}//end if
 		
@@ -112,7 +122,8 @@ public class Search {
 		ArrayList<BufferedReader> readers = validateFiles( files );
 		
 		// Create HashMap of target words
-		HashMap<String, Integer> targetWords = new HashMap<String, Integer>();
+		HashMap<String, Integer> targetWords =
+			new HashMap<String, Integer>();
 		for( int i = 0 ; i < lowerWords.size() ; i++ ) {
 			targetWords.put( lowerWords.get( i ), i );
 		}//end for
@@ -127,7 +138,8 @@ public class Search {
 			queues.add( q );
 			
 			// Create and start Group 2 thread
-			Group2Thread g2t = new Group2Thread( lowerWords.get( i ), q );
+			Group2Thread g2t =
+				new Group2Thread( lowerWords.get( i ), q );
 			g2.add( g2t );
 			Thread t = new Thread( g2t );
 			t.start();
@@ -137,7 +149,8 @@ public class Search {
 		// Create and start Group 1 Threads
 		ArrayList<Thread> group1 = new ArrayList<Thread>();
 		for( int i = 0 ; i < files.length ; i++ ) {
-			Thread t = new Thread( new Group1Thread( files[i], readers.get(i), 
+			Thread t = new Thread( 
+				new Group1Thread( files[i], readers.get(i), 
 					targetWords, queues ) );
 			t.start();
 			group1.add( t );
@@ -149,7 +162,8 @@ public class Search {
 			try {
 				t.join();
 			} catch ( InterruptedException e ) {
-				System.err.println( "Error joining threads. Abort." );
+				System.err.println( 
+					"Error joining threads. Abort." );
 				e.printStackTrace();
 				System.exit( 1 );
 			}// end try/catch
@@ -163,7 +177,8 @@ public class Search {
 			try {
 				t.join();
 			} catch ( InterruptedException e ) {
-				System.err.println( "Error joining threads. Abort." );
+				System.err.println(
+					"Error joining threads. Abort." );
 				e.printStackTrace( System.err );
 				System.exit( 1 );
 			}//end try/catch
